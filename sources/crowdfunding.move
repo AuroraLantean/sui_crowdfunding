@@ -6,7 +6,7 @@ module package_addr::crowdfunding_pricefeed {
   use sui::sui::SUI;
 	use sui::clock::Clock;
 	use supra_validator::validator_v2::DkgState;
-	use SupraOracle::SupraSValueFeed::OracleHolder;
+	use SupraOracle::SupraSValueFeed::{get_price, OracleHolder};
 	use SupraOracle::price_data_pull_v2::{verify_oracle_proof, price_data_split, MerkleRootHash};
 
 	// ====== Errors ======
@@ -30,6 +30,55 @@ module package_addr::crowdfunding_pricefeed {
   // ====== Events ======
   public struct TargetReached has copy, drop {
     raised_amount_sui: u128,
+  }
+	
+  public entry fun init_fund(target: u64, ctx: &mut TxContext) {
+    let fund_uid = object::new(ctx);
+    let fund_id: ID = object::uid_to_inner(&fund_uid);
+
+    let fund = Fund {
+        id: fund_uid,
+        target,
+        raised: balance::zero(),
+    };
+    // send the Owner Object
+    transfer::transfer(FundOwnerCap {
+          id: object::new(ctx),
+          fund_id: fund_id,
+        }, tx_context::sender(ctx));
+    // share the object so anyone can donate
+    transfer::share_object(fund);
+  }
+	
+  public entry fun donate(oracle_holder: &OracleHolder, fund: &mut Fund, amount: Coin<SUI>, ctx: &mut TxContext) {
+    // get the donated amount for receipt.
+    let amount_donated: u64 = coin::value(&amount);
+
+    // add the amount to the fund's balance
+    let coin_balance = coin::into_balance(amount);
+    balance::join(&mut fund.raised, coin_balance);
+
+    // get price of sui_usdt using Supra's Oracle SValueFeed: price in 18 dp, decimals, timestamp, round; pair is from https://docs.supra.com/oracles/data-feeds/data-feeds-index
+    let (price, _,_,_) = get_price(oracle_holder, 90);
+
+    // adjust price to have the same number of decimal points as SUI as price is in 18 dp
+    let adjusted_price = price / 1000000000;
+
+    // get the total raised amount so far in SUI
+    let raised_amount_sui = (balance::value(&fund.raised) as u128);
+
+    let fund_target_usd = (fund.target as u128) * 1000000000; // 9 decimal places
+
+    // check if the fund target in USD has been reached (by the amount donated in SUI)
+    if ((raised_amount_sui * adjusted_price) >= fund_target_usd) {
+        event::emit(TargetReached { raised_amount_sui });
+    };
+    // make and send receipt NFT to the donor
+    let receipt: Receipt = Receipt {
+        id: object::new(ctx), 
+        amount_donated,
+      };
+    transfer::transfer(receipt, tx_context::sender(ctx));
   }
 	
 	// ====== PriceFeed ====== 
