@@ -80,6 +80,18 @@ module package_addr::crowdfunding_pricefeed {
       };
     transfer::transfer(receipt, tx_context::sender(ctx));
   }
+
+  // withdraw funds from the fund contract, requires a fund owner capability that matches the fund id
+  public entry fun withdraw_funds(cap: &FundOwnerCap, fund: &mut Fund, ctx: &mut TxContext) {
+    assert!(&cap.fund_id == object::uid_as_inner(&fund.id), ENotFundOwner);
+
+    let fund_balc: u64 = balance::value(&fund.raised);
+
+    let sui_obj: Coin<SUI> = coin::take(&mut fund.raised, fund_balc, ctx);
+
+    transfer::public_transfer(sui_obj, tx_context::sender(ctx));
+  }
+	
 	
 	// ====== PriceFeed ====== 
 	// Price pair data list
