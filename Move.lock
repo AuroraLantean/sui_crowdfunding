@@ -2,7 +2,7 @@
 
 [move]
 version = 3
-manifest_digest = "0ACF3112B2E4F38B58101515DDA550DD787AFA3A23AA03F257BFB828A1686C8F"
+manifest_digest = "79ADD0386830CFE2D3E285C5A249C851F88876CAF72575CEA5C4D8A69287252B"
 deps_digest = "3C4103934B1E040BB6B23F1D610B4EF9F2F1166A50A104EADCF77467C004C600"
 dependencies = [
   { id = "Sui", name = "Sui" },
@@ -23,7 +23,7 @@ dependencies = [
 
 [[move.package]]
 id = "SupraOracle"
-source = { git = "https://github.com/Entropy-Foundation/dora-interface", rev = "master", subdir = "sui/mainnet/supra_holder" }
+source = { git = "https://github.com/Entropy-Foundation/dora-interface", rev = "testnet", subdir = "sui/testnet/supra_holder" }
 
 dependencies = [
   { id = "Sui", name = "Sui" },
@@ -32,7 +32,7 @@ dependencies = [
 
 [[move.package]]
 id = "supra_utils"
-source = { git = "https://github.com/Entropy-Foundation/dora-interface", rev = "master", subdir = "sui/mainnet/supra_utils" }
+source = { git = "https://github.com/Entropy-Foundation/dora-interface", rev = "testnet", subdir = "sui/testnet/supra_utils" }
 
 dependencies = [
   { id = "Sui", name = "Sui" },
@@ -40,7 +40,7 @@ dependencies = [
 
 [[move.package]]
 id = "supra_validator"
-source = { git = "https://github.com/Entropy-Foundation/dora-interface", rev = "master", subdir = "sui/mainnet/supra_validator" }
+source = { git = "https://github.com/Entropy-Foundation/dora-interface", rev = "testnet", subdir = "sui/testnet/supra_validator" }
 
 dependencies = [
   { id = "Sui", name = "Sui" },
@@ -51,3 +51,11 @@ dependencies = [
 compiler-version = "1.35.0"
 edition = "2024.beta"
 flavor = "sui"
+
+[env]
+
+[env.testnet]
+chain-id = "4c78adac"
+original-published-id = "0x72bbc6d77698a5d5133bcd7496398f735e7ba5a7c4e8ad61b0c09035e3b234c6"
+latest-published-id = "0x72bbc6d77698a5d5133bcd7496398f735e7ba5a7c4e8ad61b0c09035e3b234c6"
+published-version = "1"

@@ -91,7 +91,11 @@ module package_addr::crowdfunding_pricefeed {
 
     transfer::public_transfer(sui_obj, tx_context::sender(ctx));
   }
-	
+
+  public entry fun get_price_from_client(oracle_holder: &OracleHolder, pair_index: u32, _ctx: &TxContext):u128 {
+			let (price, _,_,_) = get_price(oracle_holder, pair_index);
+			price
+		}
 	
 	// ====== PriceFeed ====== 
 	// Price pair data list
@@ -105,7 +109,7 @@ module package_addr::crowdfunding_pricefeed {
 		price_pairs: vector<PricePair>
 	}
 	/// Get pair price data with verify signature
-	entry fun get_pair_price_v2(
+	public entry fun get_pair_price_v2(
 		dkg_state: &DkgState,
 		oracle_holder: &mut OracleHolder,
 		merkle_root_hash: &mut MerkleRootHash,

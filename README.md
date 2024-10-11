@@ -26,6 +26,24 @@ Create your project and add the below dependencies in your Move.toml
 
 Copy and paste the (Mainnet or Testnet) pricefeed packageID to the Move.toml
 
+#### Set Network to Testnet
+```
+sui client new-env --alias testnet --rpc https://fullnode.testnet.sui.io:443
+sui client switch --env testnet
+sui client envs
+```
+#### Setup Account
+```
+sui client new-address ed25519
+sui client active-address
+```
+#### Get Test Tokens
+```
+sui client balance
+sui client faucet
+sui client gas
+```
+
 #### Publish Coin
 ```
 sui client publish --gas-budget 50000000
