@@ -8,14 +8,16 @@ edition = "2024.beta"
 #published-at = ""
 
 [dependencies]
+# use main here because the dependency below uses main
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "main" }
 # Revision can be a branch, a tag, and a commit hash; override = true
 
 SupraOracle = { git = "https://github.com/Entropy-Foundation/dora-interface", subdir = "sui/mainnet/supra_holder", rev = "master" }
 #SupraOracle = { git = "https://github.com/Entropy-Foundation/dora-interface", subdir = "sui/testnet/supra_holder", rev = "testnet" }
+#SupraOracle = { local = "../supra_oracle"}
 
 [addresses]
-packagename = "0x0"
+package_addr = "0x0"
 #sui = "0x2"
 
 #from /mnt/sda3/asui/dora-interface-master/sui/mainnet/supra_holder/Move.toml
