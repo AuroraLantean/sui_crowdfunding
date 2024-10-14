@@ -50,12 +50,12 @@ module package_addr::crowdfunding_pricefeed {
     transfer::share_object(fund);
   }
 	
-  public entry fun donate(oracle_holder: &OracleHolder, fund: &mut Fund, amount: Coin<SUI>, ctx: &mut TxContext) {
+  public entry fun donate(oracle_holder: &OracleHolder, fund: &mut Fund, gasCoinId: Coin<SUI>, ctx: &mut TxContext) {
     // get the donated amount for receipt.
-    let amount_donated: u64 = coin::value(&amount);
+    let amount_donated: u64 = coin::value(&gasCoinId);
 
     // add the amount to the fund's balance
-    let coin_balance = coin::into_balance(amount);
+    let coin_balance = coin::into_balance(gasCoinId);
     balance::join(&mut fund.raised, coin_balance);
 
     // get price of sui_usdt using Supra's Oracle SValueFeed: price in 18 dp, decimals, timestamp, round; pair is from https://docs.supra.com/oracles/data-feeds/data-feeds-index

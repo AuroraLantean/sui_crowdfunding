@@ -44,10 +44,17 @@ sui client faucet
 sui client gas
 ```
 
-#### Publish Coin
+#### Publish Crowdfunding_pricefeed
 ```
 sui client publish --gas-budget 50000000
+sui client publish --gas-budget 50000000  --skip-dependency-verification
 ```
+published package: 
+0x72bbc6d77698a5d5133bcd7496398f735e7ba5a7c4e8ad61b0c09035e3b234c6
+
+UpgradeCap:
+0xef9ab50c5d3cea4f7e8464337531a632f2709a549656c9f9ba26275c533d9f7f
+
 
 Check the transaction digest in Suivision.xyz
 
